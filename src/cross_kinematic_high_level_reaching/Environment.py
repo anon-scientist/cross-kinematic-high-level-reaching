@@ -2,6 +2,7 @@
 $-task high-level reaching scenario
 """
 import numpy as np
+import gymnasium as gym ;
 from gazebo_sim.simulation.Environment import GenericEnvironment
 from gazebo_sim.simulation.PandaRobot import PandaRobot as Robot
 from cl_experiment.parsing import Kwarg_Parser
@@ -47,7 +48,7 @@ class Task():
     def get_milestone_amount(self):
         return len(self.goals)
 
-class RobotArmEnvironment():
+class RobotArmEnvironment(gym.Env):
     def __init__(self,**kwargs) -> None:
         self.config = self.parse_args(**kwargs)
 
@@ -98,6 +99,14 @@ class RobotArmEnvironment():
            'number_actions': len(actions),
            'terminate_cond': 'unassigned',
         }
+
+    @property
+    def action_space(self):
+        return gym.spaces.Discrete(self.nr_actions)
+    
+    @property
+    def observation_space(self):
+        return gym.spaces.Box(0,1,shape=self.observation_shape)
     
     def get_current_status(self):
         return (self.info['object'][0], self.info['terminate_cond'])
@@ -115,7 +124,7 @@ class RobotArmEnvironment():
         self.task_id = self.task_list[task_index]
         self.reset()
 
-    def reset(self):
+    def reset(self,**kwargs):
         self.current_name = self.task_id
         self.info['object'] = (self.current_name,)
         self.step_count = 0

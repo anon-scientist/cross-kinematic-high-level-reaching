@@ -17,7 +17,7 @@ export PYTHONPATH=$PYTHONPATH:${ROOT_PATH}/src
 export PYTHONPATH=$PYTHONPATH:${SRC_PATH}/icrl/src
 export PYTHONPATH=$PYTHONPATH:${SRC_PATH}/dcgmm/src
 export PYTHONPATH=$PYTHONPATH:${SRC_PATH}/cl_experiment/src
-echo "PYTHONPATH: ${PYTHONPATH}"
+export PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python
 # *--------------------------------------------------------------------
 
 python3 robot_only.py
